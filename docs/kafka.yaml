@@ -1,0 +1,141 @@
+openapi: 3.0.0
+
+info:
+  title: API Kafka
+  version: 1.0.0
+  license:
+    name: kafka.secretia.es
+    url: https://kafka.secretia.es/api
+  description: |
+    API para la publicación de mensajes en los distintos topics de kafka. 
+    Esta documentación está dedicada a definir el flujo de información entre 
+    las distintas organizaciones que usan el Kafka para la sincronización de 
+    datos.
+
+servers:
+  - url: https://kafka.secretia.es/api/
+
+tags:
+  - name: Autenticación
+  - name: Kafka Topics
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    UnauthorizedError:
+      description: Token inválido o ausente
+
+  x-usuarios:
+    description: |
+      ### Usuarios Disponibles
+      - **sia** → Administrador con acceso completo a todos los topics.  
+      - **caf** → Acceso de lectura/escritura a `caf`, `caf-sia`, `sia-caf`.  
+      - **gesfincas** → Acceso de lectura/escritura a `gesfincas`, `gesfincas-sia`, `sia-gesfincas`.
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Autenticación
+      summary: Inicia sesión y obtiene un token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: caf
+                password:
+                  type: string
+                  example: secret123
+      responses:
+        '200':
+          description: Token JWT generado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics:
+    get:
+      tags:
+        - Kafka Topics
+      summary: Lista de topics accesibles por el usuario autenticado
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Lista de topics disponibles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: caf
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /health:
+    get:
+      tags:
+        - Autenticación
+      summary: Endpoint de salud sin autenticación
+      responses:
+        '200':
+          description: El servicio está operativo
+  /:
+    get:
+      summary: 
+      description: Obtiene información básica de las URL's dinponibles
+      tags:
+        - API
+      responses:
+        '200':
+          description: Información básica
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  version:
+                    type: string
+                    example: "1.0.0"
+                  endpoints:
+                    type: object
+                    properties:
+                      auth:
+                        type: object
+                        properties:
+                          login:
+                            type: string
+                            example: "POST /api/auth/login"
+                      topics:
+                        type: object
+                        properties:
+                          list:
+                            type: string
+                            example: "GET /api/topics"
+                          produce:
+                            type: string
+                            example: "POST /api/topics/:topic/messages"
+                          consume:
+                            type: string
+                            example: "GET /api/topics/:topic/messages"
+                      health:
+                        type: string
+                        example: "GET /health"
