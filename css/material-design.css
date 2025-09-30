@@ -1,0 +1,381 @@
+:root {
+  --md-primary: #1976d2;
+  --md-primary-dark: #115293;
+  --md-primary-light: #4fc3f7;
+  --md-secondary: #ff4081;
+  --md-success: #4caf50;
+  --md-error: #f44336;
+  --md-warning: #ff9800;
+  --md-info: #2196f3;
+  --md-surface: #ffffff;
+  --md-background: #fafafa;
+  --md-text-primary: rgba(0, 0, 0, 0.87);
+  --md-text-secondary: rgba(0, 0, 0, 0.6);
+  --md-text-disabled: rgba(0, 0, 0, 0.38);
+  --md-shadow-1: 0 2px 4px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --md-shadow-2: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.24);
+  --md-shadow-3: 0 8px 16px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.24);
+  --md-radius: 4px;
+  --md-radius-large: 8px;
+  --md-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.md-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  min-width: 64px;
+  height: 36px;
+  border: none;
+  border-radius: var(--md-radius);
+  background-color: var(--md-primary);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: var(--md-transition);
+  box-shadow: var(--md-shadow-1);
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.md-button:hover {
+  background-color: var(--md-primary-dark);
+  box-shadow: var(--md-shadow-2);
+}
+
+.md-button:active {
+  box-shadow: var(--md-shadow-1);
+  transform: translateY(1px);
+}
+
+.md-button:disabled {
+  background-color: rgba(0, 0, 0, 0.12);
+  color: var(--md-text-disabled);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.md-button-outlined {
+  background-color: transparent;
+  color: var(--md-primary);
+  border: 1px solid var(--md-primary);
+  box-shadow: none;
+}
+
+.md-button-outlined:hover {
+  background-color: rgba(25, 118, 210, 0.08);
+  border-color: var(--md-primary-dark);
+}
+
+.md-button-text {
+  background-color: transparent;
+  color: var(--md-primary);
+  box-shadow: none;
+}
+
+.md-button-text:hover {
+  background-color: rgba(25, 118, 210, 0.08);
+}
+
+.md-select {
+  display: inline-block;
+  position: relative;
+  min-width: 120px;
+  padding: 8px 32px 8px 12px;
+  height: 36px;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: var(--md-radius);
+  background-color: var(--md-surface);
+  color: var(--md-text-primary);
+  font-size: 14px;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  cursor: pointer;
+  transition: var(--md-transition);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000' fill-opacity='0.54'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 20px;
+}
+
+.md-select:hover {
+  border-color: var(--md-primary);
+}
+
+.md-select:focus {
+  outline: none;
+  border-color: var(--md-primary);
+  box-shadow: 0 0 0 1px var(--md-primary);
+}
+
+.md-card {
+  background-color: var(--md-surface);
+  border-radius: var(--md-radius-large);
+  box-shadow: var(--md-shadow-1);
+  padding: 24px;
+  transition: var(--md-transition);
+}
+
+.md-card:hover {
+  box-shadow: var(--md-shadow-2);
+}
+
+.md-text-field {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: var(--md-radius);
+  background-color: var(--md-surface);
+  color: var(--md-text-primary);
+  font-size: 16px;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  transition: var(--md-transition);
+}
+
+.md-text-field:hover {
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+.md-text-field:focus {
+  outline: none;
+  border-color: var(--md-primary);
+  box-shadow: 0 0 0 1px var(--md-primary);
+}
+
+.md-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--md-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.md-form-group {
+  margin-bottom: 20px;
+}
+
+.md-auth-section {
+  background-color: var(--md-background);
+  padding: 24px;
+  border-radius: var(--md-radius-large);
+  margin-bottom: 24px;
+  box-shadow: var(--md-shadow-1);
+}
+
+.md-auth-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--md-text-primary);
+  margin: 0 0 16px 0;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.md-auth-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auth-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.auth-container .modal-ux {
+  background-color: var(--md-surface);
+  border-radius: var(--md-radius-large);
+  box-shadow: var(--md-shadow-3);
+  padding: 24px;
+}
+
+.auth-container .modal-ux-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.auth-container .modal-ux-header h3 {
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--md-text-primary);
+  margin: 0;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.auth-container .modal-ux-content {
+  padding: 16px 0;
+}
+
+.auth-container .auth-item {
+  margin-bottom: 24px;
+  padding: 20px;
+  background-color: var(--md-background);
+  border-radius: var(--md-radius);
+  transition: var(--md-transition);
+}
+
+.auth-container .auth-item:hover {
+  box-shadow: var(--md-shadow-1);
+}
+
+.auth-container .auth-item h4 {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--md-text-primary);
+  margin: 0 0 12px 0;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.auth-container .auth-item label {
+  display: block;
+  color: var(--md-text-secondary);
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.auth-container .auth-item input[type="text"],
+.auth-container .auth-item input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: var(--md-radius);
+  font-size: 14px;
+  transition: var(--md-transition);
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.auth-container .auth-item input:hover {
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+.auth-container .auth-item input:focus {
+  outline: none;
+  border-color: var(--md-primary);
+  box-shadow: 0 0 0 1px var(--md-primary);
+}
+
+.auth-container .btn-authorize {
+  background-color: var(--md-primary);
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: var(--md-radius);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--md-transition);
+  box-shadow: var(--md-shadow-1);
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.auth-container .btn-authorize:hover {
+  background-color: var(--md-primary-dark);
+  box-shadow: var(--md-shadow-2);
+}
+
+.auth-container .btn-done,
+.auth-container .btn-cancel {
+  background-color: transparent;
+  color: var(--md-primary);
+  border: 1px solid var(--md-primary);
+  padding: 10px 24px;
+  border-radius: var(--md-radius);
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--md-transition);
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.auth-container .btn-done:hover,
+.auth-container .btn-cancel:hover {
+  background-color: rgba(25, 118, 210, 0.08);
+}
+
+.auth-btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.md-divider {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  margin: 24px 0;
+  border: none;
+}
+
+.md-quick-auth {
+  background: linear-gradient(135deg, var(--md-primary-light) 0%, var(--md-primary) 100%);
+  padding: 20px;
+  border-radius: var(--md-radius-large);
+  margin-bottom: 24px;
+  box-shadow: var(--md-shadow-2);
+}
+
+.md-quick-auth p {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.md-quick-auth .md-select {
+  background-color: white;
+  margin-right: 12px;
+}
+
+.md-quick-auth .md-button {
+  background-color: white;
+  color: var(--md-primary);
+  box-shadow: var(--md-shadow-1);
+}
+
+.md-quick-auth .md-button:hover {
+  background-color: var(--md-background);
+  box-shadow: var(--md-shadow-2);
+}
+
+@keyframes md-ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.md-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.md-ripple::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.md-ripple:active::before {
+  width: 300px;
+  height: 300px;
+}

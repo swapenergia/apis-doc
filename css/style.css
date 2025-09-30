@@ -1,3 +1,29 @@
 .responses-inner>div>div {
  background-color: red;
 }
+
+.modal-ux-content {
+  padding: 0px !important;
+}
+
+.text-white {
+  color: whitesmoke !important;
+}
+
+.auth-container #user-select {
+  flex: 1 1 auto !important;
+}
+
+.auth-btn-wrapper {
+  flex-direction: row-reverse !important;
+  justify-content: space-between !important;
+}
+
+
+.auth-btn-wrapper button.auth {
+  display: block !important;
+}
+
+.servers-title {
+  display: none !important;
+}

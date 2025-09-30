@@ -1,6 +1,6 @@
 import { UserAuthPlugin } from "./auth-plugin.js";
 
-window.onload = function() {
+window.onload = function () {
   const ui = SwaggerUIBundle({
     urls: [
       { url: "docs/kafka.yaml", name: "API Kafka" },
