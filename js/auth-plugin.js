@@ -1,10 +1,6 @@
-const BASE_URL = 'https://kafka.secretia.es'
+import { USERS } from "./enviroments.js";
 
-const USERS = {
-  sia: "PfwNJhParjfm4jOskvxsNAQYkcgxnE3DW2gmniXm",
-  caf: "FEhRUnLWirUSybMk5WTLwCPqS83fucaLTwXDcvkT",
-  gesfincas: "EMWyHw39e3D3E4IG3sOfQMjxTIxclCM9Ri4Zj3QA"
-};
+const BASE_URL = 'https://kafka.secretia.es'
 
 const getApiToken = async (system, select) => {
   const user = select.value;
