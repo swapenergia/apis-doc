@@ -27,3 +27,42 @@
 .servers-title {
   display: none !important;
 }
+
+/* Personalización del logo en el topbar */
+.topbar .link {
+  display: flex;
+  align-items: center;
+}
+
+/* Ocultar el logo SVG original de Swagger */
+.topbar .link img,
+.topbar .link svg {
+  display: none !important;
+}
+
+/* Agregar logo personalizado */
+.topbar .link::before {
+  content: '';
+  display: inline-block;
+  width: 150px; /* Ajusta el ancho según tu logo */
+  height: 40px; /* Ajusta la altura según tu logo */
+  background-image: url('../img/logo.svg'); /* Ruta a tu logo */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 10px;
+}
+
+/* Opcional: Ocultar el texto "swagger" del título si solo quieres mostrar el logo */
+.topbar .link span {
+  display: none !important;
+}
+
+/* Opcional: Si quieres mantener un texto personalizado junto al logo */
+/* .topbar .link::after {
+  content: 'API Kafka Docs'; 
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 10px;
+} */
