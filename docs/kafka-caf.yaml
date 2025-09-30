@@ -1,0 +1,397 @@
+openapi: 3.0.0
+
+info:
+  title: API Kafka - Usuario CAF
+  version: 1.0.0
+  license:
+    name: kafka.secretia.es
+    url: https://kafka.secretia.es/api
+  description: |
+    API para la publicación de mensajes en los distintos topics de kafka.
+    Esta documentación está dedicada a definir el flujo de información entre
+    las distintas organizaciones que usan el Kafka para la sincronización de
+    datos.
+
+    **Usuario: CAF** - Acceso a topics: `caf`, `caf-sia`, `sia-caf`
+
+servers:
+  - url: https://kafka.secretia.es/api/
+
+tags:
+  - name: Autenticación
+  - name: Kafka Topics - CAF
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Message:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Clave del mensaje
+        value:
+          type: object
+          description: Contenido del mensaje
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp del mensaje
+        partition:
+          type: integer
+          description: Partición del topic
+        offset:
+          type: integer
+          description: Offset del mensaje
+
+    ProduceRequest:
+      type: object
+      required:
+        - value
+      properties:
+        key:
+          type: string
+          description: Clave del mensaje (opcional)
+        value:
+          type: object
+          description: Contenido del mensaje
+
+  responses:
+    UnauthorizedError:
+      description: Token inválido o ausente
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Unauthorized"
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Autenticación
+      summary: Inicia sesión y obtiene un token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: caf
+                password:
+                  type: string
+                  example: secret123
+      responses:
+        '200':
+          description: Token JWT generado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics:
+    get:
+      tags:
+        - Kafka Topics - CAF
+      summary: Lista de topics disponibles para CAF
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Lista de topics disponibles para usuario CAF
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: ["caf", "caf-sia", "sia-caf"]
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics/caf/messages:
+    post:
+      tags:
+        - Kafka Topics - CAF
+      summary: Publicar mensaje en topic CAF
+      description: Topic principal de CAF para mensajes generales
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProduceRequest'
+            examples:
+              ejemplo1:
+                summary: Mensaje de notificación
+                value:
+                  key: "notif-001"
+                  value:
+                    tipo: "notificacion"
+                    mensaje: "Nuevo proceso iniciado"
+                    timestamp: "2024-01-20T10:30:00Z"
+      responses:
+        '200':
+          description: Mensaje publicado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  partition:
+                    type: integer
+                    example: 0
+                  offset:
+                    type: integer
+                    example: 42
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    get:
+      tags:
+        - Kafka Topics - CAF
+      summary: Consumir mensajes del topic CAF
+      description: Obtiene los mensajes más recientes del topic CAF
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Número de mensajes a obtener (máximo 100)
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Offset desde donde empezar a leer
+      responses:
+        '200':
+          description: Lista de mensajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics/caf-sia/messages:
+    post:
+      tags:
+        - Kafka Topics - CAF
+      summary: Publicar mensaje de CAF hacia SIA
+      description: |
+        Topic para comunicación unidireccional de CAF hacia SIA.
+        Utilizado para reportar información al sistema central.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProduceRequest'
+            examples:
+              reporte:
+                summary: Reporte de estado
+                value:
+                  key: "reporte-diario"
+                  value:
+                    tipo: "reporte"
+                    fecha: "2024-01-20"
+                    estado: "operativo"
+                    metricas:
+                      procesos_completados: 150
+                      errores: 2
+      responses:
+        '200':
+          description: Mensaje publicado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  partition:
+                    type: integer
+                    example: 0
+                  offset:
+                    type: integer
+                    example: 43
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    get:
+      tags:
+        - Kafka Topics - CAF
+      summary: Consumir mensajes del topic CAF-SIA
+      description: Obtiene los mensajes enviados de CAF hacia SIA
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Número de mensajes a obtener (máximo 100)
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Offset desde donde empezar a leer
+      responses:
+        '200':
+          description: Lista de mensajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics/sia-caf/messages:
+    post:
+      tags:
+        - Kafka Topics - CAF
+      summary: Publicar mensaje de SIA hacia CAF
+      description: |
+        Topic para comunicación de SIA hacia CAF.
+        CAF solo puede leer mensajes de este topic, no puede publicar.
+        **Nota: Este endpoint requiere permisos de administrador (SIA)**
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProduceRequest'
+      responses:
+        '200':
+          description: Mensaje publicado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  partition:
+                    type: integer
+                    example: 0
+                  offset:
+                    type: integer
+                    example: 44
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Sin permisos para publicar en este topic
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Forbidden: CAF users cannot publish to sia-caf topic"
+
+    get:
+      tags:
+        - Kafka Topics - CAF
+      summary: Consumir mensajes del topic SIA-CAF
+      description: |
+        Obtiene los mensajes enviados desde SIA hacia CAF.
+        CAF puede leer estos mensajes para recibir instrucciones o configuraciones del sistema central.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Número de mensajes a obtener (máximo 100)
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Offset desde donde empezar a leer
+      responses:
+        '200':
+          description: Lista de mensajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+              examples:
+                instrucciones:
+                  summary: Mensajes de instrucción
+                  value:
+                    - key: "config-update"
+                      value:
+                        tipo: "configuracion"
+                        accion: "actualizar"
+                        parametros:
+                          timeout: 30
+                          reintentos: 3
+                      timestamp: "2024-01-20T09:00:00Z"
+                      partition: 0
+                      offset: 100
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /health:
+    get:
+      tags:
+        - Autenticación
+      summary: Endpoint de salud sin autenticación
+      responses:
+        '200':
+          description: El servicio está operativo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    format: date-time

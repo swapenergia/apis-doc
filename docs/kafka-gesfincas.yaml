@@ -1,0 +1,440 @@
+openapi: 3.0.0
+
+info:
+  title: API Kafka - Usuario GESFINCAS
+  version: 1.0.0
+  license:
+    name: kafka.secretia.es
+    url: https://kafka.secretia.es/api
+  description: |
+    API para la publicación de mensajes en los distintos topics de kafka.
+    Esta documentación está dedicada a definir el flujo de información entre
+    las distintas organizaciones que usan el Kafka para la sincronización de
+    datos.
+
+    **Usuario: GESFINCAS** - Acceso a topics: `gesfincas`, `gesfincas-sia`, `sia-gesfincas`
+
+servers:
+  - url: https://kafka.secretia.es/api/
+
+tags:
+  - name: Autenticación
+  - name: Kafka Topics - GESFINCAS
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Message:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Clave del mensaje
+        value:
+          type: object
+          description: Contenido del mensaje
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp del mensaje
+        partition:
+          type: integer
+          description: Partición del topic
+        offset:
+          type: integer
+          description: Offset del mensaje
+
+    ProduceRequest:
+      type: object
+      required:
+        - value
+      properties:
+        key:
+          type: string
+          description: Clave del mensaje (opcional)
+        value:
+          type: object
+          description: Contenido del mensaje
+
+  responses:
+    UnauthorizedError:
+      description: Token inválido o ausente
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Unauthorized"
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Autenticación
+      summary: Inicia sesión y obtiene un token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: gesfincas
+                password:
+                  type: string
+                  example: secret123
+      responses:
+        '200':
+          description: Token JWT generado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics:
+    get:
+      tags:
+        - Kafka Topics - GESFINCAS
+      summary: Lista de topics disponibles para GESFINCAS
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Lista de topics disponibles para usuario GESFINCAS
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example: ["gesfincas", "gesfincas-sia", "sia-gesfincas"]
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics/gesfincas/messages:
+    post:
+      tags:
+        - Kafka Topics - GESFINCAS
+      summary: Publicar mensaje en topic GESFINCAS
+      description: Topic principal de GESFINCAS para mensajes generales de gestión de fincas
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProduceRequest'
+            examples:
+              nueva_propiedad:
+                summary: Alta de nueva propiedad
+                value:
+                  key: "prop-001"
+                  value:
+                    tipo: "alta_propiedad"
+                    referencia: "PROP2024001"
+                    direccion: "Calle Mayor 123"
+                    propietario: "Juan Pérez"
+                    fecha_alta: "2024-01-20"
+              incidencia:
+                summary: Reporte de incidencia
+                value:
+                  key: "inc-045"
+                  value:
+                    tipo: "incidencia"
+                    propiedad: "PROP2023456"
+                    descripcion: "Avería en caldera"
+                    prioridad: "alta"
+                    fecha: "2024-01-20T14:30:00Z"
+      responses:
+        '200':
+          description: Mensaje publicado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  partition:
+                    type: integer
+                    example: 0
+                  offset:
+                    type: integer
+                    example: 45
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    get:
+      tags:
+        - Kafka Topics - GESFINCAS
+      summary: Consumir mensajes del topic GESFINCAS
+      description: Obtiene los mensajes más recientes del topic GESFINCAS
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Número de mensajes a obtener (máximo 100)
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Offset desde donde empezar a leer
+      responses:
+        '200':
+          description: Lista de mensajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics/gesfincas-sia/messages:
+    post:
+      tags:
+        - Kafka Topics - GESFINCAS
+      summary: Publicar mensaje de GESFINCAS hacia SIA
+      description: |
+        Topic para comunicación unidireccional de GESFINCAS hacia SIA.
+        Utilizado para reportar información de gestión inmobiliaria al sistema central.
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProduceRequest'
+            examples:
+              reporte_mensual:
+                summary: Reporte mensual de gestión
+                value:
+                  key: "reporte-202401"
+                  value:
+                    tipo: "reporte_mensual"
+                    periodo: "2024-01"
+                    estadisticas:
+                      propiedades_activas: 1250
+                      nuevas_altas: 23
+                      bajas: 5
+                      incidencias_resueltas: 45
+                      incidencias_pendientes: 12
+                    facturacion:
+                      total: 125000.50
+                      cobrado: 118000.00
+                      pendiente: 7000.50
+              sincronizacion:
+                summary: Sincronización de datos
+                value:
+                  key: "sync-batch-001"
+                  value:
+                    tipo: "sincronizacion"
+                    entidad: "contratos"
+                    operacion: "actualización_masiva"
+                    registros_afectados: 150
+                    timestamp: "2024-01-20T10:00:00Z"
+      responses:
+        '200':
+          description: Mensaje publicado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  partition:
+                    type: integer
+                    example: 0
+                  offset:
+                    type: integer
+                    example: 46
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    get:
+      tags:
+        - Kafka Topics - GESFINCAS
+      summary: Consumir mensajes del topic GESFINCAS-SIA
+      description: Obtiene los mensajes enviados de GESFINCAS hacia SIA
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Número de mensajes a obtener (máximo 100)
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Offset desde donde empezar a leer
+      responses:
+        '200':
+          description: Lista de mensajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /topics/sia-gesfincas/messages:
+    post:
+      tags:
+        - Kafka Topics - GESFINCAS
+      summary: Publicar mensaje de SIA hacia GESFINCAS
+      description: |
+        Topic para comunicación de SIA hacia GESFINCAS.
+        GESFINCAS solo puede leer mensajes de este topic, no puede publicar.
+        **Nota: Este endpoint requiere permisos de administrador (SIA)**
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProduceRequest'
+      responses:
+        '200':
+          description: Mensaje publicado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  partition:
+                    type: integer
+                    example: 0
+                  offset:
+                    type: integer
+                    example: 47
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Sin permisos para publicar en este topic
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Forbidden: GESFINCAS users cannot publish to sia-gesfincas topic"
+
+    get:
+      tags:
+        - Kafka Topics - GESFINCAS
+      summary: Consumir mensajes del topic SIA-GESFINCAS
+      description: |
+        Obtiene los mensajes enviados desde SIA hacia GESFINCAS.
+        GESFINCAS puede leer estos mensajes para recibir instrucciones, actualizaciones o configuraciones del sistema central.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            maximum: 100
+          description: Número de mensajes a obtener (máximo 100)
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          description: Offset desde donde empezar a leer
+      responses:
+        '200':
+          description: Lista de mensajes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+              examples:
+                configuracion:
+                  summary: Mensaje de configuración
+                  value:
+                    - key: "config-2024"
+                      value:
+                        tipo: "configuracion"
+                        modulo: "facturacion"
+                        parametros:
+                          iva_general: 21
+                          iva_reducido: 10
+                          dias_vencimiento: 30
+                      timestamp: "2024-01-15T08:00:00Z"
+                      partition: 0
+                      offset: 200
+                actualizacion_tarifas:
+                  summary: Actualización de tarifas
+                  value:
+                    - key: "tarifas-2024"
+                      value:
+                        tipo: "actualizacion_tarifas"
+                        vigencia_desde: "2024-02-01"
+                        tarifas:
+                          gestion_basica: 50.00
+                          gestion_integral: 100.00
+                          comision_alquiler: 8.5
+                      timestamp: "2024-01-20T10:00:00Z"
+                      partition: 0
+                      offset: 201
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /health:
+    get:
+      tags:
+        - Autenticación
+      summary: Endpoint de salud sin autenticación
+      responses:
+        '200':
+          description: El servicio está operativo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    format: date-time

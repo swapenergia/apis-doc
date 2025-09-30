@@ -69,6 +69,7 @@ const constructAuthWrapper = (system) => {
   controlsDiv.insertBefore(selectWrapperDom, button)
 
   button.addEventListener('click', async (e) => {
+    const selectedUser = selectWrapperDom.value;
     const token = await getApiToken(system, selectWrapperDom)
 
     if (!token) return; // Si no hay token, salir
@@ -89,9 +90,89 @@ const constructAuthWrapper = (system) => {
     // Cerrar modal después de login exitoso
     const closeBtn = document.querySelector(".auth-btn-wrapper .btn-done");
     if (closeBtn) closeBtn.click();
+
+    // Cambiar el spec según el usuario
+    if (window.updateSwaggerSpec) {
+      window.updateSwaggerSpec(selectedUser);
+    }
+
+    // Guardar el usuario actual para mostrar indicador
+    window.currentKafkaUser = selectedUser;
+    updateUserIndicator(selectedUser);
   })
   return dom
 }
+
+const updateUserIndicator = (user) => {
+  // Remover indicador anterior si existe
+  const existingIndicator = document.querySelector('.kafka-user-indicator');
+  if (existingIndicator) {
+    existingIndicator.remove();
+  }
+
+  if (!user) return;
+
+  // Crear nuevo indicador
+  const indicator = document.createElement('div');
+  indicator.className = 'kafka-user-indicator';
+  indicator.innerHTML = `
+    <span class="user-label">Usuario activo:</span>
+    <span class="user-name">${user.toUpperCase()}</span>
+    <span class="user-role">${getUserRole(user)}</span>
+  `;
+
+  // Agregar estilos inline para el indicador
+  indicator.style.cssText = `
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    font-family: system-ui, -apple-system, sans-serif;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  `;
+
+  // Estilos para los elementos internos
+  const styleSheet = document.createElement('style');
+  styleSheet.textContent = `
+    .kafka-user-indicator .user-label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    .kafka-user-indicator .user-name {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .kafka-user-indicator .user-role {
+      font-size: 11px;
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+  `;
+
+  if (!document.querySelector('#kafka-indicator-styles')) {
+    styleSheet.id = 'kafka-indicator-styles';
+    document.head.appendChild(styleSheet);
+  }
+
+  document.body.appendChild(indicator);
+};
+
+const getUserRole = (user) => {
+  const roles = {
+    sia: 'Administrador',
+    caf: 'CAF - Acceso limitado',
+    gesfincas: 'GESFINCAS - Acceso limitado'
+  };
+  return roles[user.toLowerCase()] || 'Usuario';
+};
 
 export const UserAuthPlugin = function () {
   return {
