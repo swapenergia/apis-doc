@@ -350,6 +350,25 @@
   box-shadow: var(--md-shadow-2);
 }
 
+.md-quick-auth .md-text-field {
+  background-color: white;
+  color: var(--md-text-primary);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.md-quick-auth .md-text-field:focus {
+  outline: none;
+  border-color: var(--md-primary-dark);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.md-quick-auth .md-form-group {
+  margin-bottom: 12px;
+}
+
 @keyframes md-ripple {
   to {
     transform: scale(4);

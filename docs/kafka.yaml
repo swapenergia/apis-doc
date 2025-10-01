@@ -12,6 +12,12 @@ info:
     las distintas organizaciones que usan el Kafka para la sincronización de 
     datos.
 
+    La idea es que las distintas empresas hagan **POST** en los **topics que
+    empiecen por su nombre** de organización para **publicar** mensajes. 
+
+    Y para **consumir** los mensajes destinados a cada organización, hay que hacer
+    **GET** en los topics que **acaben por su nombre de organización**.
+
 servers:
   - url: https://kafka.secretia.es/api/
 

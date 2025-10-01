@@ -131,6 +131,7 @@ paths:
   # Topics CAF
   /topics/caf/messages:
     post:
+      deprecated: true
       tags:
         - Kafka Topics - CAF
       summary: Publicar mensaje en topic CAF
@@ -164,6 +165,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
 
     get:
+      deprecated: true
       tags:
         - Kafka Topics - CAF
       summary: Consumir mensajes del topic CAF
@@ -327,6 +329,7 @@ paths:
   # Topics GESFINCAS
   /topics/gesfincas/messages:
     post:
+      deprecated: true
       tags:
         - Kafka Topics - GESFINCAS
       summary: Publicar mensaje en topic GESFINCAS
@@ -358,8 +361,8 @@ paths:
                     example: 45
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-
     get:
+      deprecated: true
       tags:
         - Kafka Topics - GESFINCAS
       summary: Consumir mensajes del topic GESFINCAS

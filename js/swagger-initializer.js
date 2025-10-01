@@ -1,4 +1,5 @@
 import { UserAuthPlugin } from "./auth-plugin.js";
+import { TopbarPlugin } from "./topbar-plugin.js";
 
 window.onload = function () {
   // Mapeo de usuarios a sus archivos YAML correspondientes
@@ -17,7 +18,7 @@ window.onload = function () {
       SwaggerUIBundle.presets.apis,
       SwaggerUIStandalonePreset
     ],
-    plugins: [UserAuthPlugin],
+    plugins: [UserAuthPlugin, TopbarPlugin],
     layout: "StandaloneLayout"
   });
 

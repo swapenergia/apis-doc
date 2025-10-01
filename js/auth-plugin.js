@@ -1,27 +1,23 @@
 const BASE_URL = 'https://kafka.secretia.es'
 
-export const USERS = {
-  sia: "PfwNJhParjfm4jOskvxsNAQYkcgxnE3DW2gmniXm",
-  caf: "FEhRUnLWirUSybMk5WTLwCPqS83fucaLTwXDcvkT",
-  gesfincas: "EMWyHw39e3D3E4IG3sOfQMjxTIxclCM9Ri4Zj3QA"
-};
-
-const getApiToken = async (system, select) => {
-  const user = select.value;
-  if (!user) return alert("Selecciona un usuario");
+const getApiToken = async (username, password) => {
+  if (!username || !password) {
+    alert("Por favor ingresa usuario y contraseña");
+    return;
+  }
 
   try {
     const resp = await fetch(`${BASE_URL}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: user.toLowerCase(),
-        password: USERS[user]
+        username: username.toLowerCase(),
+        password: password
       })
     });
 
     if (!resp.ok) {
-      alert("Error en login");
+      alert("Error en login: Usuario o contraseña incorrectos");
       return;
     }
 
@@ -35,42 +31,37 @@ const getApiToken = async (system, select) => {
   }
 };
 
-const constuctAuthSelector = () => {
-  const select = document.createElement("select");
-  select.id = "user-select";
-  select.innerHTML = `<option value="">--Seleccionar--</option>`;
-  Object.keys(USERS).forEach(u => {
-    const opt = document.createElement("option");
-    opt.value = u;
-    opt.textContent = u;
-    select.appendChild(opt);
-  });
-  return select
-}
 
 const constructAuthWrapper = (system) => {
   const authButtonId = "custom-auth-button"
-  const selectWrapperDom = constuctAuthSelector()
-  selectWrapperDom.classList.add('md-select')
+  const usernameInputId = "username-input"
+  const passwordInputId = "password-input"
 
   // Crear el contenedor principal
   const dom = document.createElement('div')
   dom.classList.add('md-quick-auth')
   dom.innerHTML = `
     <h4 class="text-white">Login rápido:</h4>
-    <div class="md-auth-controls">
+    <div class="md-form-group">
+      <input type="text" id="${usernameInputId}" class="md-text-field" placeholder="Usuario" />
+    </div>
+    <div class="md-form-group">
+      <input type="password" id="${passwordInputId}" class="md-text-field" placeholder="Contraseña" />
+    </div>
+    <div class="md-auth-controls justify-content-end">
       <button id="${authButtonId}" class="md-button md-ripple">Login</button>
     </div>
   `
 
-  // Insertar el select antes del botón
-  const controlsDiv = dom.querySelector('.md-auth-controls')
   const button = dom.querySelector(`#${authButtonId}`)
-  controlsDiv.insertBefore(selectWrapperDom, button)
+  const usernameInput = dom.querySelector(`#${usernameInputId}`)
+  const passwordInput = dom.querySelector(`#${passwordInputId}`)
 
   button.addEventListener('click', async (e) => {
-    const selectedUser = selectWrapperDom.value;
-    const token = await getApiToken(system, selectWrapperDom)
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    const token = await getApiToken(username, password)
 
     if (!token) return; // Si no hay token, salir
 
@@ -93,12 +84,16 @@ const constructAuthWrapper = (system) => {
 
     // Cambiar el spec según el usuario
     if (window.updateSwaggerSpec) {
-      window.updateSwaggerSpec(selectedUser);
+      window.updateSwaggerSpec(username);
     }
 
     // Guardar el usuario actual para mostrar indicador
-    window.currentKafkaUser = selectedUser;
-    updateUserIndicator(selectedUser);
+    window.currentKafkaUser = username;
+    updateUserIndicator(username);
+
+    // Limpiar los campos después del login exitoso
+    usernameInput.value = '';
+    passwordInput.value = '';
   })
   return dom
 }
@@ -180,7 +175,7 @@ export const UserAuthPlugin = function () {
       // Hook: cuando Swagger ya está montado
       const observer = new MutationObserver((mutations, obs) => {
         const modal = document.querySelector(".auth-container"); // modal Authorize
-        if (modal && !modal.querySelector("#user-select")) {
+        if (modal && !modal.querySelector("#username-input")) {
           // Desconectar temporalmente para evitar bucle infinito
           obs.disconnect();
 

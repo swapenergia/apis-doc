@@ -128,6 +128,7 @@ paths:
 
   /topics/caf/messages:
     post:
+      deprecated: true
       tags:
         - Kafka Topics - CAF
       summary: Publicar mensaje en topic CAF
@@ -170,6 +171,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
 
     get:
+      deprecated: true
       tags:
         - Kafka Topics - CAF
       summary: Consumir mensajes del topic CAF
@@ -218,17 +220,28 @@ paths:
             schema:
               $ref: '#/components/schemas/ProduceRequest'
             examples:
-              reporte:
-                summary: Reporte de estado
+              create-ticket:
+                summary: Crear usuario
+                description: |
+                  Este ejemplo muestra cómo enviar un mensaje para crear un nuevo usuario desde CAF hacia SIA.
+
+                  **Notas importantes:**
+                  
+
+                  **Flujo esperado:**
+                  1. CAF genera el mensaje con los datos del nuevo usuario
+                  2. El mensaje se publica en el topic `caf-sia`
+                  3. SIA procesa el mensaje y crea el usuario en su sistema
+                  4. SIA puede responder a través del topic `sia-caf` con confirmación
                 value:
-                  key: "reporte-diario"
+                  key: "user.create"
                   value:
-                    tipo: "reporte"
-                    fecha: "2024-01-20"
-                    estado: "operativo"
-                    metricas:
-                      procesos_completados: 150
-                      errores: 2
+                    "id": "string (uppercase)"
+                    "roles": ["array"]
+                    "origin": "string"
+                    "communityId": "string"
+                    "createdAt": "ISO 8601"
+                    "...owner_fields": "todos los campos del owner"
       responses:
         '200':
           description: Mensaje publicado exitosamente
