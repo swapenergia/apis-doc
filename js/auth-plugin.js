@@ -119,7 +119,7 @@ const updateUserIndicator = (user) => {
   // Agregar estilos inline para el indicador
   indicator.style.cssText = `
     position: fixed;
-    top: 10px;
+    top: 65px;
     right: 10px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
