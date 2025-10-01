@@ -106,103 +106,6 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
-  /topics:
-    get:
-      tags:
-        - Kafka Topics - CAF
-      summary: Lista de topics disponibles para CAF
-      security:
-        - BearerAuth: []
-      responses:
-        '200':
-          description: Lista de topics disponibles para usuario CAF
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-                example: ["caf", "caf-sia", "sia-caf"]
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-  /topics/caf/messages:
-    post:
-      deprecated: true
-      tags:
-        - Kafka Topics - CAF
-      summary: Publicar mensaje en topic CAF
-      description: Topic principal de CAF para mensajes generales
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProduceRequest'
-            examples:
-              ejemplo1:
-                summary: Mensaje de notificación
-                value:
-                  key: "notif-001"
-                  value:
-                    tipo: "notificacion"
-                    mensaje: "Nuevo proceso iniciado"
-                    timestamp: "2024-01-20T10:30:00Z"
-      responses:
-        '200':
-          description: Mensaje publicado exitosamente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  partition:
-                    type: integer
-                    example: 0
-                  offset:
-                    type: integer
-                    example: 42
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
-    get:
-      deprecated: true
-      tags:
-        - Kafka Topics - CAF
-      summary: Consumir mensajes del topic CAF
-      description: Obtiene los mensajes más recientes del topic CAF
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            default: 10
-            maximum: 100
-          description: Número de mensajes a obtener (máximo 100)
-        - in: query
-          name: offset
-          schema:
-            type: integer
-          description: Offset desde donde empezar a leer
-      responses:
-        '200':
-          description: Lista de mensajes
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Message'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
   /topics/caf-sia/messages:
     post:
       tags:
@@ -220,13 +123,10 @@ paths:
             schema:
               $ref: '#/components/schemas/ProduceRequest'
             examples:
-              create-ticket:
+              user-create:
                 summary: Crear usuario
                 description: |
-                  Este ejemplo muestra cómo enviar un mensaje para crear un nuevo usuario desde CAF hacia SIA.
-
-                  **Notas importantes:**
-                  
+                  Mensaje para crear un nuevo usuario desde CAF hacia SIA.
 
                   **Flujo esperado:**
                   1. CAF genera el mensaje con los datos del nuevo usuario
@@ -236,12 +136,95 @@ paths:
                 value:
                   key: "user.create"
                   value:
-                    "id": "string (uppercase)"
-                    "roles": ["array"]
-                    "origin": "string"
-                    "communityId": "string"
-                    "createdAt": "ISO 8601"
-                    "...owner_fields": "todos los campos del owner"
+                    dni: "12345678A"
+                    completeNameNormalized: "GARCIA LOPEZ, JUAN"
+                    name: "Juan"
+                    surname: "García López"
+                    email: "juan.garcia@example.com"
+                    phone: "600123456"
+                    phoneNormalized: "+34600123456"
+                    communities:
+                      communityId1:
+                        role: "propietario"
+                        instance: "1A"
+                    admin: false
+                    adminrole: "gestor"
+                    createdAt: "2024-01-20T10:30:00Z"
+
+              organization-create:
+                summary: Crear organización/despacho
+                description: |
+                  Mensaje para crear una nueva organización (despacho) desde CAF hacia SIA.
+                value:
+                  key: "organization.create"
+                  value:
+                    cif: "B12345678"
+                    deskName: "Despacho García & Asociados"
+                    email: "info@garcia-asociados.com"
+                    cp: "28001"
+                    address: "Calle Mayor 123, 2º A"
+                    contact: "María García"
+                    phone1: "912345678"
+                    phone1Normalized: "+34912345678"
+                    phone2: "600987654"
+                    phone2Normalized: "+34600987654"
+                    admin: "admin-user-id-123"
+                    url: "https://www.garcia-asociados.com"
+                    createdAt: "2024-01-20T11:00:00Z"
+
+              community-create:
+                summary: Crear comunidad
+                description: |
+                  Mensaje para crear una nueva comunidad de propietarios desde CAF hacia SIA.
+                value:
+                  key: "community.create"
+                  value:
+                    cif: "H87654321"
+                    communityName: "Comunidad Edificio Plaza Mayor"
+                    address: "Plaza Mayor 15"
+                    city: "Madrid"
+                    province: "Madrid"
+                    cp: "28012"
+                    bankAccount:
+                      iban: "ES1234567890123456789012"
+                      swift: "BBVAESMM"
+                      bank: "BBVA"
+                    desk: "desk-id-456"
+                    instances:
+                      - id: "1A"
+                        type: "vivienda"
+                        owner: "owner-id-789"
+                      - id: "1B"
+                        type: "vivienda"
+                        owner: "owner-id-790"
+                    activities:
+                      - "mantenimiento"
+                      - "limpieza"
+                      - "jardinería"
+                    createdAt: "2024-01-20T12:00:00Z"
+
+              provider-create:
+                summary: Crear proveedor
+                description: |
+                  Mensaje para crear un nuevo proveedor de servicios desde CAF hacia SIA.
+                value:
+                  key: "provider.create"
+                  value:
+                    id: "provider-123"
+                    name: "Electricidad López S.L."
+                    email: "contacto@electricidad-lopez.com"
+                    phone: "915551234"
+                    phoneNormalized: "+34915551234"
+                    contact: "Antonio López"
+                    address:
+                      street: "Calle Industrial 45"
+                      city: "Madrid"
+                      province: "Madrid"
+                      cp: "28020"
+                    CNAE: "4321"
+                    freelance: false
+                    communityId: "community-456"
+                    createdAt: "2024-01-20T13:00:00Z"
       responses:
         '200':
           description: Mensaje publicado exitosamente
@@ -262,85 +245,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
-    get:
-      tags:
-        - Kafka Topics - CAF
-      summary: Consumir mensajes del topic CAF-SIA
-      description: Obtiene los mensajes enviados de CAF hacia SIA
-      security:
-        - BearerAuth: []
-      parameters:
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            default: 10
-            maximum: 100
-          description: Número de mensajes a obtener (máximo 100)
-        - in: query
-          name: offset
-          schema:
-            type: integer
-          description: Offset desde donde empezar a leer
-      responses:
-        '200':
-          description: Lista de mensajes
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Message'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-
   /topics/sia-caf/messages:
-    post:
-      tags:
-        - Kafka Topics - CAF
-      summary: Publicar mensaje de SIA hacia CAF
-      description: |
-        Topic para comunicación de SIA hacia CAF.
-        CAF solo puede leer mensajes de este topic, no puede publicar.
-        **Nota: Este endpoint requiere permisos de administrador (SIA)**
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProduceRequest'
-      responses:
-        '200':
-          description: Mensaje publicado exitosamente
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  partition:
-                    type: integer
-                    example: 0
-                  offset:
-                    type: integer
-                    example: 44
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '403':
-          description: Sin permisos para publicar en este topic
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Forbidden: CAF users cannot publish to sia-caf topic"
-
     get:
       tags:
         - Kafka Topics - CAF

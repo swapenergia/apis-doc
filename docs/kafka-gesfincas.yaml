@@ -113,7 +113,6 @@ paths:
       summary: Publicar mensaje de GESFINCAS hacia SIA
       description: |
         Topic para comunicación unidireccional de GESFINCAS hacia SIA.
-        Utilizado para reportar información de gestión inmobiliaria al sistema central.
       security:
         - BearerAuth: []
       requestBody:
@@ -123,33 +122,111 @@ paths:
             schema:
               $ref: '#/components/schemas/ProduceRequest'
             examples:
-              reporte_mensual:
-                summary: Reporte mensual de gestión
+              community-create:
+                summary: Crear comunidad
+                description: |
+                  Mensaje para crear una nueva comunidad desde GESFINCAS hacia SIA.
                 value:
-                  key: "reporte-202401"
+                  key: "community.create"
                   value:
-                    tipo: "reporte_mensual"
-                    periodo: "2024-01"
-                    estadisticas:
-                      propiedades_activas: 1250
-                      nuevas_altas: 23
-                      bajas: 5
-                      incidencias_resueltas: 45
-                      incidencias_pendientes: 12
-                    facturacion:
-                      total: 125000.50
-                      cobrado: 118000.00
-                      pendiente: 7000.50
-              sincronizacion:
-                summary: Sincronización de datos
+                    Nombre: " "
+                    id: "H24578403"
+                    postalCode: "24404"
+                    city: "PONFERRADA"
+                    province: "LEON"
+                    Propiedades: "30"
+                    IBAN: "ES3030350392673920000457"
+                    CodVia: "CL"
+                    Calle: "MATILDE CONESA"
+                    Numero: "14"
+                    Piso: null
+                    RestoDomicilio: " "
+                    id_erp: 106
+                    Modificado: "2024-09-12T11:11:31.457000"
+
+              contract-create:
+                summary: Crear contrato
+                description: |
+                  Mensaje para crear un nuevo contrato desde GESFINCAS hacia SIA.
                 value:
-                  key: "sync-batch-001"
+                  key: "contract.create"
                   value:
-                    tipo: "sincronizacion"
-                    entidad: "contratos"
-                    operacion: "actualización_masiva"
-                    registros_afectados: 150
-                    timestamp: "2024-01-20T10:00:00Z"
+                    Gremio: "ALLIANZ CIA DE SEGUROS Y REASEGUROS, SA"
+                    IdGremio: "A28007748"
+                    NombreComunidad: "MATEO GARZA 6"
+                    IDComunidad: "H24096778"
+                    ReferenciaExterna: "036934500"
+                    KeyExterna: "424"
+                    FechaAlta: "2024-07-21T00:00:00"
+                    FechaBaja: " "
+                    vigencia: true
+                    Modificado: "2024-07-21T19:17:27.020000"
+
+              owner-create:
+                summary: Crear propietario
+                description: |
+                  Mensaje para crear un nuevo propietario desde GESFINCAS hacia SIA.
+                value:
+                  key: "owner.create"
+                  value:
+                    comunidad: "E24030199"
+                    name: "ADELINA LOPEZ RODRIGUEZ"
+                    surname1: "LOPEZ"
+                    surname2: "RODRIGUEZ"
+                    TipoIdentificacion: 1
+                    door: "4ºDCHA"
+                    id_instancia: 5695
+                    weight: 3.67
+                    telefono: " "
+                    email: null
+                    BAJA: false
+                    idGes: 6305
+                    id: " "
+                    Modificado: "2021-12-03T16:00:08.327000"
+
+              provider-create:
+                summary: Crear proveedor
+                description: |
+                  Mensaje para crear un nuevo proveedor desde GESFINCAS hacia SIA.
+                value:
+                  key: "provider.create"
+                  value:
+                    id_persona: 2
+                    name: "ADMINISTRACION"
+                    BAJA: false
+                    id: "B24621930"
+                    Razon: "COMUNIDADES BIERZO 77 SL"
+                    Seguro: false
+                    postalCode: "24402"
+                    city: "PONFERRADA"
+                    province: "LEÓN"
+                    CodVia: "CL"
+                    Calle: "ANTOLIN LOPEZ PELAEZ"
+                    Numero: "26"
+                    Piso: "EN"
+                    RestoDomicilio: " "
+                    telefono: "987408400 , 987408400"
+                    email: " "
+                    Modificado: "2025-02-28T20:35:29.607000"
+
+              receipt-create:
+                summary: Crear recibo
+                description: |
+                  Mensaje para crear un nuevo recibo desde GESFINCAS hacia SIA.
+                value:
+                  key: "receipt.create"
+                  value:
+                    id: "324080"
+                    FECHAVTO: "2025-01-01T00:00:00"
+                    importe: 2.23
+                    totpagado: 2.23
+                    tipo_factura: "C"
+                    name_persona: "RAFAEL RAIMUNDEZ"
+                    nif_persona: " "
+                    name_empresa: "CL REAL 32-34"
+                    nif_empresa: "H24409583"
+                    Comentario: "COBRO FACT. Nº 002728 R.01/01/2025 PG 1 RAFAEL RAIMUNDEZ"
+                    Modificado: "2025-02-18T18:19:50.083000"
       responses:
         '200':
           description: Mensaje publicado exitosamente
