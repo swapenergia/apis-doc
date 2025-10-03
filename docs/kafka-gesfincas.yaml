@@ -127,106 +127,111 @@ paths:
                 description: |
                   Mensaje para crear una nueva comunidad desde GESFINCAS hacia SIA.
                 value:
-                  key: "community.create"
-                  value:
-                    Nombre: " "
-                    id: "H24578403"
-                    postalCode: "24404"
-                    city: "PONFERRADA"
-                    province: "LEON"
-                    Propiedades: "30"
-                    IBAN: "ES3030350392673920000457"
-                    CodVia: "CL"
-                    Calle: "MATILDE CONESA"
-                    Numero: "14"
-                    Piso: null
-                    RestoDomicilio: " "
-                    id_erp: 106
-                    Modificado: "2024-09-12T11:11:31.457000"
+                  messages:
+                    - key: "community.create"
+                      value:
+                        Nombre: " "
+                        id: "H24578403"
+                        postalCode: "24404"
+                        city: "PONFERRADA"
+                        province: "LEON"
+                        Propiedades: "30"
+                        IBAN: "ES3030350392673920000457"
+                        CodVia: "CL"
+                        Calle: "MATILDE CONESA"
+                        Numero: "14"
+                        Piso: null
+                        RestoDomicilio: " "
+                        id_erp: 106
+                        Modificado: "2024-09-12T11:11:31.457000"
 
               contract-create:
                 summary: Crear contrato
                 description: |
                   Mensaje para crear un nuevo contrato desde GESFINCAS hacia SIA.
                 value:
-                  key: "contract.create"
-                  value:
-                    Gremio: "ALLIANZ CIA DE SEGUROS Y REASEGUROS, SA"
-                    IdGremio: "A28007748"
-                    NombreComunidad: "MATEO GARZA 6"
-                    IDComunidad: "H24096778"
-                    ReferenciaExterna: "036934500"
-                    KeyExterna: "424"
-                    FechaAlta: "2024-07-21T00:00:00"
-                    FechaBaja: " "
-                    vigencia: true
-                    Modificado: "2024-07-21T19:17:27.020000"
+                  messages:
+                    - key: "contract.create"
+                      value:
+                        Gremio: "ALLIANZ CIA DE SEGUROS Y REASEGUROS, SA"
+                        IdGremio: "A28007748"
+                        NombreComunidad: "MATEO GARZA 6"
+                        IDComunidad: "H24096778"
+                        ReferenciaExterna: "036934500"
+                        KeyExterna: "424"
+                        FechaAlta: "2024-07-21T00:00:00"
+                        FechaBaja: " "
+                        vigencia: true
+                        Modificado: "2024-07-21T19:17:27.020000"
 
               owner-create:
                 summary: Crear propietario
                 description: |
                   Mensaje para crear un nuevo propietario desde GESFINCAS hacia SIA.
                 value:
-                  key: "owner.create"
-                  value:
-                    comunidad: "E24030199"
-                    name: "ADELINA LOPEZ RODRIGUEZ"
-                    surname1: "LOPEZ"
-                    surname2: "RODRIGUEZ"
-                    TipoIdentificacion: 1
-                    door: "4ºDCHA"
-                    id_instancia: 5695
-                    weight: 3.67
-                    telefono: " "
-                    email: null
-                    BAJA: false
-                    idGes: 6305
-                    id: " "
-                    Modificado: "2021-12-03T16:00:08.327000"
+                  messages:
+                    - key: "owner.create"
+                      value:
+                        comunidad: "E24030199"
+                        name: "ADELINA LOPEZ RODRIGUEZ"
+                        surname1: "LOPEZ"
+                        surname2: "RODRIGUEZ"
+                        TipoIdentificacion: 1
+                        door: "4ºDCHA"
+                        id_instancia: 5695
+                        weight: 3.67
+                        telefono: " "
+                        email: null
+                        BAJA: false
+                        idGes: 6305
+                        id: " "
+                        Modificado: "2021-12-03T16:00:08.327000"
 
               provider-create:
                 summary: Crear proveedor
                 description: |
                   Mensaje para crear un nuevo proveedor desde GESFINCAS hacia SIA.
                 value:
-                  key: "provider.create"
-                  value:
-                    id_persona: 2
-                    name: "ADMINISTRACION"
-                    BAJA: false
-                    id: "B24621930"
-                    Razon: "COMUNIDADES BIERZO 77 SL"
-                    Seguro: false
-                    postalCode: "24402"
-                    city: "PONFERRADA"
-                    province: "LEÓN"
-                    CodVia: "CL"
-                    Calle: "ANTOLIN LOPEZ PELAEZ"
-                    Numero: "26"
-                    Piso: "EN"
-                    RestoDomicilio: " "
-                    telefono: "987408400 , 987408400"
-                    email: " "
-                    Modificado: "2025-02-28T20:35:29.607000"
+                  messages:
+                    - key: "provider.create"
+                      value:
+                        id_persona: 2
+                        name: "ADMINISTRACION"
+                        BAJA: false
+                        id: "B24621930"
+                        Razon: "COMUNIDADES BIERZO 77 SL"
+                        Seguro: false
+                        postalCode: "24402"
+                        city: "PONFERRADA"
+                        province: "LEÓN"
+                        CodVia: "CL"
+                        Calle: "ANTOLIN LOPEZ PELAEZ"
+                        Numero: "26"
+                        Piso: "EN"
+                        RestoDomicilio: " "
+                        telefono: "987408400 , 987408400"
+                        email: " "
+                        Modificado: "2025-02-28T20:35:29.607000"
 
               receipt-create:
                 summary: Crear recibo
                 description: |
                   Mensaje para crear un nuevo recibo desde GESFINCAS hacia SIA.
                 value:
-                  key: "receipt.create"
-                  value:
-                    id: "324080"
-                    FECHAVTO: "2025-01-01T00:00:00"
-                    importe: 2.23
-                    totpagado: 2.23
-                    tipo_factura: "C"
-                    name_persona: "RAFAEL RAIMUNDEZ"
-                    nif_persona: " "
-                    name_empresa: "CL REAL 32-34"
-                    nif_empresa: "H24409583"
-                    Comentario: "COBRO FACT. Nº 002728 R.01/01/2025 PG 1 RAFAEL RAIMUNDEZ"
-                    Modificado: "2025-02-18T18:19:50.083000"
+                  messages:
+                    - key: "receipt.create"
+                      value:
+                        id: "324080"
+                        FECHAVTO: "2025-01-01T00:00:00"
+                        importe: 2.23
+                        totpagado: 2.23
+                        tipo_factura: "C"
+                        name_persona: "RAFAEL RAIMUNDEZ"
+                        nif_persona: " "
+                        name_empresa: "CL REAL 32-34"
+                        nif_empresa: "H24409583"
+                        Comentario: "COBRO FACT. Nº 002728 R.01/01/2025 PG 1 RAFAEL RAIMUNDEZ"
+                        Modificado: "2025-02-18T18:19:50.083000"
       responses:
         '200':
           description: Mensaje publicado exitosamente
@@ -283,31 +288,33 @@ paths:
                 configuracion:
                   summary: Mensaje de configuración
                   value:
-                    - key: "config-2024"
-                      value:
-                        tipo: "configuracion"
-                        modulo: "facturacion"
-                        parametros:
-                          iva_general: 21
-                          iva_reducido: 10
-                          dias_vencimiento: 30
-                      timestamp: "2024-01-15T08:00:00Z"
-                      partition: 0
-                      offset: 200
+                    messages:
+                      - key: "config-2024"
+                        value:
+                          tipo: "configuracion"
+                          modulo: "facturacion"
+                          parametros:
+                            iva_general: 21
+                            iva_reducido: 10
+                            dias_vencimiento: 30
+                          timestamp: "2024-01-15T08:00:00Z"
+                          partition: 0
+                          offset: 200
                 actualizacion_tarifas:
                   summary: Actualización de tarifas
                   value:
-                    - key: "tarifas-2024"
-                      value:
-                        tipo: "actualizacion_tarifas"
-                        vigencia_desde: "2024-02-01"
-                        tarifas:
-                          gestion_basica: 50.00
-                          gestion_integral: 100.00
-                          comision_alquiler: 8.5
-                      timestamp: "2024-01-20T10:00:00Z"
-                      partition: 0
-                      offset: 201
+                    messages:
+                      - key: "tarifas-2024"
+                        value:
+                          tipo: "actualizacion_tarifas"
+                          vigencia_desde: "2024-02-01"
+                          tarifas:
+                            gestion_basica: 50.00
+                            gestion_integral: 100.00
+                            comision_alquiler: 8.5
+                          timestamp: "2024-01-20T10:00:00Z"
+                          partition: 0
+                          offset: 201
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 

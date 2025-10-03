@@ -134,97 +134,101 @@ paths:
                   3. SIA procesa el mensaje y crea el usuario en su sistema
                   4. SIA puede responder a través del topic `sia-caf` con confirmación
                 value:
-                  key: "user.create"
-                  value:
-                    dni: "12345678A"
-                    completeNameNormalized: "GARCIA LOPEZ, JUAN"
-                    name: "Juan"
-                    surname: "García López"
-                    email: "juan.garcia@example.com"
-                    phone: "600123456"
-                    phoneNormalized: "+34600123456"
-                    communities:
-                      communityId1:
-                        role: "propietario"
-                        instance: "1A"
-                    admin: false
-                    adminrole: "gestor"
-                    createdAt: "2024-01-20T10:30:00Z"
+                  messages:
+                    - key: "user.create"
+                      value:
+                        dni: "12345678A"
+                        completeNameNormalized: "GARCIA LOPEZ, JUAN"
+                        name: "Juan"
+                        surname: "García López"
+                        email: "juan.garcia@example.com"
+                        phone: "600123456"
+                        phoneNormalized: "+34600123456"
+                        communities:
+                          communityId1:
+                            role: "propietario"
+                            instance: "1A"
+                        admin: false
+                        adminrole: "gestor"
+                        createdAt: "2024-01-20T10:30:00Z"
 
               organization-create:
                 summary: Crear organización/despacho
                 description: |
                   Mensaje para crear una nueva organización (despacho) desde CAF hacia SIA.
                 value:
-                  key: "organization.create"
-                  value:
-                    cif: "B12345678"
-                    deskName: "Despacho García & Asociados"
-                    email: "info@garcia-asociados.com"
-                    cp: "28001"
-                    address: "Calle Mayor 123, 2º A"
-                    contact: "María García"
-                    phone1: "912345678"
-                    phone1Normalized: "+34912345678"
-                    phone2: "600987654"
-                    phone2Normalized: "+34600987654"
-                    admin: "admin-user-id-123"
-                    url: "https://www.garcia-asociados.com"
-                    createdAt: "2024-01-20T11:00:00Z"
+                  messages:
+                    - key: "organization.create"
+                      value:
+                        cif: "B12345678"
+                        deskName: "Despacho García & Asociados"
+                        email: "info@garcia-asociados.com"
+                        cp: "28001"
+                        address: "Calle Mayor 123, 2º A"
+                        contact: "María García"
+                        phone1: "912345678"
+                        phone1Normalized: "+34912345678"
+                        phone2: "600987654"
+                        phone2Normalized: "+34600987654"
+                        admin: "admin-user-id-123"
+                        url: "https://www.garcia-asociados.com"
+                        createdAt: "2024-01-20T11:00:00Z"
 
               community-create:
                 summary: Crear comunidad
                 description: |
                   Mensaje para crear una nueva comunidad de propietarios desde CAF hacia SIA.
                 value:
-                  key: "community.create"
-                  value:
-                    cif: "H87654321"
-                    communityName: "Comunidad Edificio Plaza Mayor"
-                    address: "Plaza Mayor 15"
-                    city: "Madrid"
-                    province: "Madrid"
-                    cp: "28012"
-                    bankAccount:
-                      iban: "ES1234567890123456789012"
-                      swift: "BBVAESMM"
-                      bank: "BBVA"
-                    desk: "desk-id-456"
-                    instances:
-                      - id: "1A"
-                        type: "vivienda"
-                        owner: "owner-id-789"
-                      - id: "1B"
-                        type: "vivienda"
-                        owner: "owner-id-790"
-                    activities:
-                      - "mantenimiento"
-                      - "limpieza"
-                      - "jardinería"
-                    createdAt: "2024-01-20T12:00:00Z"
+                  messages:
+                    - key: "community.create"
+                      value:
+                        cif: "H87654321"
+                        communityName: "Comunidad Edificio Plaza Mayor"
+                        address: "Plaza Mayor 15"
+                        city: "Madrid"
+                        province: "Madrid"
+                        cp: "28012"
+                        bankAccount:
+                          iban: "ES1234567890123456789012"
+                          swift: "BBVAESMM"
+                          bank: "BBVA"
+                        desk: "desk-id-456"
+                        instances:
+                          - id: "1A"
+                            type: "vivienda"
+                            owner: "owner-id-789"
+                          - id: "1B"
+                            type: "vivienda"
+                            owner: "owner-id-790"
+                        activities:
+                          - "mantenimiento"
+                          - "limpieza"
+                          - "jardinería"
+                        createdAt: "2024-01-20T12:00:00Z"
 
               provider-create:
                 summary: Crear proveedor
                 description: |
                   Mensaje para crear un nuevo proveedor de servicios desde CAF hacia SIA.
                 value:
-                  key: "provider.create"
-                  value:
-                    id: "provider-123"
-                    name: "Electricidad López S.L."
-                    email: "contacto@electricidad-lopez.com"
-                    phone: "915551234"
-                    phoneNormalized: "+34915551234"
-                    contact: "Antonio López"
-                    address:
-                      street: "Calle Industrial 45"
-                      city: "Madrid"
-                      province: "Madrid"
-                      cp: "28020"
-                    CNAE: "4321"
-                    freelance: false
-                    communityId: "community-456"
-                    createdAt: "2024-01-20T13:00:00Z"
+                  messages:
+                    - key: "provider.create"
+                      value:
+                        id: "provider-123"
+                        name: "Electricidad López S.L."
+                        email: "contacto@electricidad-lopez.com"
+                        phone: "915551234"
+                        phoneNormalized: "+34915551234"
+                        contact: "Antonio López"
+                        address:
+                          street: "Calle Industrial 45"
+                          city: "Madrid"
+                          province: "Madrid"
+                          cp: "28020"
+                        CNAE: "4321"
+                        freelance: false
+                        communityId: "community-456"
+                        createdAt: "2024-01-20T13:00:00Z"
       responses:
         '200':
           description: Mensaje publicado exitosamente
@@ -281,16 +285,17 @@ paths:
                 instrucciones:
                   summary: Mensajes de instrucción
                   value:
-                    - key: "config-update"
-                      value:
-                        tipo: "configuracion"
-                        accion: "actualizar"
-                        parametros:
-                          timeout: 30
-                          reintentos: 3
-                      timestamp: "2024-01-20T09:00:00Z"
-                      partition: 0
-                      offset: 100
+                    messages:
+                      - key: "config-update"
+                        value:
+                          tipo: "configuracion"
+                          accion: "actualizar"
+                          parametros:
+                            timeout: 30
+                            reintentos: 3
+                          timestamp: "2024-01-20T09:00:00Z"
+                          partition: 0
+                          offset: 100
         '401':
           $ref: '#/components/responses/UnauthorizedError'
 
